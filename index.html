@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Periods Special 💌</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Georgia, serif;
+            background: #faf7f5;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 1.5rem;
+        }
+        .card {
+            background: #ffffff;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            max-width: 520px;
+            width: 100%;
+        }
+        h2 { margin-top: 0; color: #2c3e50; font-weight: 500; }
+        p { line-height: 1.7; color: #4a5568; }
+        input[type="password"] {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            font-size: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            outline: none;
+            margin-bottom: 1rem;
+        }
+        input[type="password"]:focus { border-color: #cbd5e1; }
+        button {
+            width: 100%;
+            padding: 0.8rem;
+            background: #2b2d42;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        button:hover { opacity: 0.9; }
+        #error { color: #e53e3e; font-size: 0.875rem; margin-top: 0.75rem; display: none; }
+        #content { display: none; animation: fadeIn 0.8s ease-in-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div id="lock-screen">
+            <h3 style="margin-top: 0; font-weight: 500;">Enter the passcode</h3>
+            <p style="font-size: 0.9rem; color: #718096;">A private message waiting for you.</p>
+            <input type="password" id="pwd" placeholder="Passcode" autofocus />
+            <button onclick="unlock()">Open</button>
+            <div id="error">Incorrect passcode. Try again.</div>
+        </div>
+        <div id="content"></div>
+    </div>
+
+    <script>
+        const salt = Uint8Array.from(atob("hFYTQSEr7mrXs6ygf/hHIg=="), c => c.charCodeAt(0));
+        const iv = Uint8Array.from(atob("1Ab3DNmsVD45Rsmx"), c => c.charCodeAt(0));
+        const ct = Uint8Array.from(atob("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"), c => c.charCodeAt(0));
+
+        async function unlock() {
+            const pwd = document.getElementById("pwd").value;
+            const err = document.getElementById("error");
+            err.style.display = "none";
+
+            try {
+                const enc = new TextEncoder();
+                const keyMaterial = await crypto.subtle.importKey(
+                    "raw", enc.encode(pwd), "PBKDF2", false, ["deriveKey"]
+                );
+                const key = await crypto.subtle.deriveKey(
+                    { name: "PBKDF2", salt: salt, iterations: 200000, hash: "SHA-256" },
+                    keyMaterial,
+                    { name: "AES-GCM", length: 256 },
+                    false,
+                    ["decrypt"]
+                );
+                const decrypted = await crypto.subtle.decrypt(
+                    { name: "AES-GCM", iv: iv },
+                    key,
+                    ct
+                );
+                const dec = new TextDecoder();
+                document.getElementById("lock-screen").style.display = "none";
+                const content = document.getElementById("content");
+                content.innerHTML = dec.decode(decrypted);
+                content.style.display = "block";
+            } catch (e) {
+                err.style.display = "block";
+            }
+        }
+
+        document.getElementById("pwd").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") unlock();
+        });
+    </script>
+</body>
+</html>
